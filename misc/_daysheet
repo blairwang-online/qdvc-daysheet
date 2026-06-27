@@ -1,0 +1,22 @@
+#compdef daysheet
+# Zsh completion for the `daysheet` command.
+#
+# Installation: see misc/shell_completion.md
+# This completes the four subcommands of daysheet.
+
+_daysheet() {
+  local -a subcommands
+  subcommands=(
+    'today:Print today'\''s daysheet (create/archive as needed)'
+    'tomorrow:Print tomorrow'\''s daysheet (create if folder empty)'
+    'status:Report on the today / tomorrow / archive folders'
+    'help:Show brief help'
+  )
+
+  # Only the first word takes an argument; everything is a subcommand.
+  if (( CURRENT == 2 )); then
+    _describe -t commands 'daysheet command' subcommands
+  fi
+}
+
+_daysheet "$@"

@@ -1,0 +1,5 @@
+# Configuration for daysheet.py
+#
+# working_directory: absolute path (or ~) to the folder that holds your
+# 01-today, 02-tomorrow, 03-archive and 04-templates subfolders.
+working_directory: "~/daysheet-data"
