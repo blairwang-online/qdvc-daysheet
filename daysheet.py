@@ -151,7 +151,7 @@ def build_daysheet_text(wd, d):
     pretty = d.strftime("%A, %-d %B %Y")
     heading = f"# {d.isoformat()}: Daysheet for {pretty}"
 
-    parts = ["---", "ready_to_archive: False", "---", heading, ""]
+    parts = ["---", "ready_to_archive: False", "---", "", heading, ""]
 
     component_files = sorted(
         p for p in components_dir.iterdir()
