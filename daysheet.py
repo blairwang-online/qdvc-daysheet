@@ -312,6 +312,7 @@ def cmd_status(wd):
             ready = {True: "yes", False: "no"}.get(flag, "unknown")
             print(f"  today's daysheet present ({date_to_filename(today)}); "
                   f"ready_to_archive: {ready}")
+            print(f"    path: {tf}")
         else:
             print("  today's daysheet NOT present")
         for d, name in info["daysheets"]:
@@ -328,7 +329,9 @@ def cmd_status(wd):
     else:
         has_tomorrow = (wd / TOMORROW_DIR / date_to_filename(tomorrow)).is_file()
         if has_tomorrow:
+            tf = wd / TOMORROW_DIR / date_to_filename(tomorrow)
             print(f"  tomorrow's daysheet present ({date_to_filename(tomorrow)})")
+            print(f"    path: {tf}")
         for name in tomorrow_entries:
             d = parse_daysheet_filename(name)
             if d == tomorrow:
