@@ -10,7 +10,7 @@ This setup assumes **zsh with [oh-my-zsh](https://ohmyz.sh/)**.
 Add an alias to your `~/.zshrc` so the command exists:
 
 ```sh
-alias daysheet='python3 /full/path/to/daysheet/daysheet.py'
+daysheet() { python3 /full/path/to/daysheet/daysheet.py "$@" }
 ```
 
 > The completion keys off the command name `daysheet` (`#compdef daysheet`),
