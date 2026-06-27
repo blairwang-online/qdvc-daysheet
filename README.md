@@ -1,4 +1,4 @@
-# qdvc-daysheet
+# daysheet
 
 A small command-line tool for managing **daysheets** — markdown summaries of
 the day ahead, used for planning. Each daysheet is a plain `.md` file built
@@ -85,7 +85,7 @@ Add an alias to your `~/.zshrc` so `daysheet` works from anywhere:
 alias daysheet='python3 /full/path/to/daysheet/daysheet.py'
 ```
 
-Tab-completion for zsh is available — see [`misc/shell_completion.md`](misc/shell_completion.md).
+Tab-completion for zsh + oh-my-zsh is available — see [`misc/shell_completion.md`](misc/shell_completion.md).
 
 ## Configuration
 
