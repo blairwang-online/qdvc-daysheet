@@ -1,8 +1,10 @@
 # daysheet
 
-A small command-line tool for managing **daysheets** — markdown summaries of
+A **quick-and-dirty vibe-coded ("QDVC")** command-line toolkit managing **daysheets** — markdown summaries of
 the day ahead, used for planning. Each daysheet is a plain `.md` file built
 from reusable template components, with a date heading and YAML frontmatter.
+
+Vibe-coding records in [vibe-coding/](vibe-coding/).
 
 ```markdown
 ---
