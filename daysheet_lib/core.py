@@ -130,7 +130,8 @@ def build_daysheet_text(wd, d):
             parts.append(section)
             parts.append("")
 
-    return "\n".join(parts).rstrip("\n") + "\n"
+    # End with at least two empty lines after the final content line.
+    return "\n".join(parts).rstrip("\n") + "\n\n\n"
 
 
 def write_daysheet(wd, folder, d):

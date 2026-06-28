@@ -67,7 +67,8 @@ Constants for these names live in `daysheet_lib/config.py`
   larger-prefixed one. If no component crosses the threshold the sections are
   appended at the end. The heading uses `%-d` (no leading
   zero on the day); on platforms lacking `%-d` you would switch to `%d` or a
-  manual format.
+  manual format. The file ends with the final content line followed by two
+  empty lines (terminator `\n\n\n`).
 - **Recurring tasks** (`daysheet_lib/recurring.py`): `build_recurring_sections(wd, d)`
   reads `04-templates/recurring-tasks.crontab` (absent file → no sections),
   ignores the minute/hour fields, and matches day-of-month/month/day-of-week
