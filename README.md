@@ -4,7 +4,7 @@ A **quick-and-dirty vibe-coded ("QDVC")** command-line toolkit managing **dayshe
 the day ahead, used for planning. Each daysheet is a plain `.md` file built
 from reusable template components, with a date heading and YAML frontmatter.
 
-Vibe-coding records in [vibe-coding/](vibe-coding/).
+Vibe-coding records in [vibe-coding/](vibe-coding).
 
 ```markdown
 ---
@@ -77,7 +77,7 @@ reported and nothing is created.
 ```sh
 git clone <this-repo>
 cd daysheet
-cp config.yml config.yml.local   # optional; or just edit config.yml
+cp config-example.yml config.yml   # then edit config.yml
 # set working_directory to your data folder
 ```
 

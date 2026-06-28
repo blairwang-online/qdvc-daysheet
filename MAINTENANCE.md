@@ -4,9 +4,32 @@ Technical notes for anyone (human or AI) maintaining `daysheet.py`.
 
 ## Overview
 
-Single-file CLI (`daysheet.py`), no third-party dependency required. PyYAML is
+`daysheet.py` is a thin entry point; the implementation lives in the
+`python_modules` package, with no third-party dependency required. PyYAML is
 used opportunistically for `config.yml`; if it is absent a minimal line parser
 reads the one key we need (`working_directory`).
+
+### Code layout
+
+```
+daysheet.py                     # thin CLI entry point (arg parse + dispatch)
+python_modules/
+  config.py                     # folder-name constants, fail(), load_config()
+  core.py                       # filename/frontmatter helpers + assembly
+  commands/
+    __init__.py                 # COMMANDS registry + NO_CONFIG set
+    today.py                    # run(wd) for `daysheet today`
+    tomorrow.py                 # run(wd) for `daysheet tomorrow`
+    status.py                   # run(wd) for `daysheet status`
+    help.py                     # run() for `daysheet help` (+ HELP_TEXT)
+```
+
+Each command module exposes `run(wd)` (help's `run()` takes no working
+directory). `python_modules/commands/__init__.py` maps the CLI verb to its
+handler in `COMMANDS` and lists config-free commands in `NO_CONFIG`. To add a
+command: drop a `run(wd)` module under `commands/`, import and register it in
+that `__init__.py`, then document it in README.md, `daysheet help`, and the
+zsh completion (`misc/_daysheet`).
 
 ## Layout of the working directory
 
@@ -19,7 +42,7 @@ Configured via `working_directory` in `config.yml` (sibling of `daysheet.py`):
 04-templates/components/  # *.md fragments, concatenated in filename order
 ```
 
-Constants for these names live at the top of `daysheet.py`
+Constants for these names live in `python_modules/config.py`
 (`TODAY_DIR`, `TOMORROW_DIR`, `ARCHIVE_DIR`, `TEMPLATE_DIR`,
 `COMPONENTS_SUBDIR`). Change them there if folder names ever change.
 
@@ -43,18 +66,18 @@ Constants for these names live at the top of `daysheet.py`
 
 ## Command behaviour (the parts most likely to be edited)
 
-`cmd_today`:
+`commands/today.py` (`run`):
 1. If `<today>.md` exists in `01-today`, print and stop.
 2. Else, for each *older* daysheet flagged `ready_to_archive: True`, move it to
    `03-archive/YYYY/MM/`.
 3. Re-scan. If `01-today` is empty → create + print today's. If not → list
    remaining items (classified) on stderr and exit 1 without creating.
 
-`cmd_tomorrow`:
+`commands/tomorrow.py` (`run`):
 1. If `<tomorrow>.md` exists in `02-tomorrow`, print and stop.
 2. Else if folder empty → create + print. Else report contents, exit 1.
 
-`cmd_status` reports on all three folders. The archive section compares the
+`commands/status.py` (`run`) reports on all three folders. The archive section compares the
 inclusive day-span of the date range against the file count and notes any
 apparent missing days (or surplus files).
 
