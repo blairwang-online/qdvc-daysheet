@@ -1,6 +1,7 @@
 """Filename/frontmatter helpers and daysheet assembly."""
 
 import os
+import re
 import datetime
 from pathlib import Path
 
@@ -8,10 +9,21 @@ from daysheet_lib.config import (
     ARCHIVE_DIR,
     COMPONENTS_SUBDIR,
     DAYSHEET_RE,
+    RECURRING_INSERT_MAX_PREFIX,
     TEMPLATE_DIR,
     TODAY_DIR,
     fail,
 )
+from daysheet_lib.recurring import build_recurring_sections
+
+# Leading numeric prefix on a component filename, e.g. "010-foo.md" -> 10.
+_PREFIX_RE = re.compile(r"^(\d+)")
+
+
+def _component_prefix(path):
+    """Return the integer prefix of a component filename, or None if absent."""
+    m = _PREFIX_RE.match(path.name)
+    return int(m.group(1)) if m else None
 
 
 def today_date():
@@ -89,10 +101,34 @@ def build_daysheet_text(wd, d):
     if not component_files:
         fail(f"No template components (*.md) found in {components_dir}")
 
+    # Build the programmatically-generated recurring/checklist sections. They
+    # are inserted immediately after the last component whose numeric prefix is
+    # <= RECURRING_INSERT_MAX_PREFIX (e.g. after 009-, before 010-).
+    recurring_sections = build_recurring_sections(wd, d)
+    recurring_inserted = not recurring_sections  # nothing to insert => "done"
+
     for comp in component_files:
+        prefix = _component_prefix(comp)
+        # Once we reach a component past the threshold, flush the generated
+        # sections first (so they sit between the <=009 and >=010 components).
+        if (not recurring_inserted
+                and prefix is not None
+                and prefix > RECURRING_INSERT_MAX_PREFIX):
+            for section in recurring_sections:
+                parts.append(section)
+                parts.append("")
+            recurring_inserted = True
+
         text = comp.read_text(encoding="utf-8").rstrip("\n")
         parts.append(text)
         parts.append("")  # blank line between components
+
+    # If every component had a small prefix (or none crossed the threshold),
+    # append the generated sections at the end.
+    if not recurring_inserted:
+        for section in recurring_sections:
+            parts.append(section)
+            parts.append("")
 
     return "\n".join(parts).rstrip("\n") + "\n"
 

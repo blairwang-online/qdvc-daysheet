@@ -15,6 +15,13 @@ TOMORROW_DIR = "02-tomorrow"
 ARCHIVE_DIR = "03-archive"
 TEMPLATE_DIR = "04-templates"
 COMPONENTS_SUBDIR = "components"
+CHECKLISTS_SUBDIR = "checklists"
+RECURRING_TASKS_FILE = "recurring-tasks.crontab"
+
+# The generated recurring-tasks section is inserted immediately after any
+# component whose numeric filename prefix is <= this value (e.g. 001-, 003-,
+# 009-), and before the first component with a larger prefix (e.g. 010-).
+RECURRING_INSERT_MAX_PREFIX = 9
 
 # A valid daysheet filename is exactly an ISO date, e.g. 2026-06-28.md
 DAYSHEET_RE = re.compile(r"^(\d{4})-(\d{2})-(\d{2})\.md$")

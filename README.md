@@ -33,13 +33,33 @@ Your daysheets live in a working directory (set in `config.yml`) with four folde
 01-today      → today's daysheet (e.g. 2026-06-28.md)
 02-tomorrow   → where you prepare tomorrow's daysheet
 03-archive    → past daysheets, filed under YYYY/MM/
-04-templates  → components/ used to assemble new daysheets
+04-templates  → components/, recurring-tasks.crontab, checklists/
 ```
 
 A new daysheet is assembled from an auto-generated date heading plus every
 `.md` file in `04-templates/components/`, sorted by filename. Frontmatter
 (`ready_to_archive: False`) is added automatically and is used later to decide
 when an old daysheet can be filed away.
+
+### Recurring tasks and checklists
+
+Recurring tasks are defined in `04-templates/recurring-tasks.crontab` using
+crontab-style schedules (the minute and hour fields are ignored; only
+day-of-month, month, and day-of-week are matched against the daysheet's date):
+
+```
+0 0 * * *    Email clearing process
+0 0 * * 0    Weekly review for the week ahead #weekly-review
+0 0 1 */2 *  Bi-monthly tyre check #check-tyre-pressure
+```
+
+Standard cron matching is supported (ranges, lists, `*/n` steps, and the
+day-of-month-or-day-of-week rule). Tasks that fire on a given day are inserted
+into a generated `## Recurring tasks` section, placed after components whose
+numeric prefix is `009` or smaller and before `010`+ components. A task may end
+with a `#tag` naming a checklist at `04-templates/checklists/<tag>.md`; when
+such a task fires, that checklist is appended under `## Checklists mentioned`
+(a missing checklist file is warned about on stderr and skipped).
 
 ## Usage
 

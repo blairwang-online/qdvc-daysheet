@@ -16,6 +16,7 @@ daysheet.py                     # thin CLI entry point (arg parse + dispatch)
 daysheet_lib/
   config.py                     # folder-name constants, fail(), load_config()
   core.py                       # filename/frontmatter helpers + assembly
+  recurring.py                  # crontab parsing + recurring/checklist sections
   commands/
     __init__.py                 # COMMANDS registry + NO_CONFIG set
     today.py                    # run(wd) for `daysheet today`
@@ -36,15 +37,18 @@ zsh completion (`misc/_daysheet`).
 Configured via `working_directory` in `config.yml` (sibling of `daysheet.py`):
 
 ```
-01-today/                 # exactly one daysheet expected: <today>.md
-02-tomorrow/              # staging for <tomorrow>.md
-03-archive/YYYY/MM/       # filed past daysheets
-04-templates/components/  # *.md fragments, concatenated in filename order
+01-today/                       # exactly one daysheet expected: <today>.md
+02-tomorrow/                    # staging for <tomorrow>.md
+03-archive/YYYY/MM/             # filed past daysheets
+04-templates/components/        # *.md fragments, concatenated in filename order
+04-templates/recurring-tasks.crontab   # crontab-style recurring task schedule
+04-templates/checklists/        # <tag>.md bodies referenced by #tag tasks
 ```
 
 Constants for these names live in `daysheet_lib/config.py`
 (`TODAY_DIR`, `TOMORROW_DIR`, `ARCHIVE_DIR`, `TEMPLATE_DIR`,
-`COMPONENTS_SUBDIR`). Change them there if folder names ever change.
+`COMPONENTS_SUBDIR`, `CHECKLISTS_SUBDIR`, `RECURRING_TASKS_FILE`,
+`RECURRING_INSERT_MAX_PREFIX`). Change them there if folder names ever change.
 
 ## Core conventions
 
@@ -57,9 +61,24 @@ Constants for these names live in `daysheet_lib/config.py`
   `None` conservatively (do NOT archive on `None`).
 - **Assembly** (`build_daysheet_text`): frontmatter → date heading
   (`# YYYY-MM-DD: Daysheet for <weekday, D Month YYYY>`) → each component file
-  in sorted order, separated by blank lines. The heading uses `%-d` (no leading
+  in sorted order, separated by blank lines, with the generated recurring/
+  checklist sections spliced in after the last component whose numeric filename
+  prefix is `<= RECURRING_INSERT_MAX_PREFIX` (default 9) and before the first
+  larger-prefixed one. If no component crosses the threshold the sections are
+  appended at the end. The heading uses `%-d` (no leading
   zero on the day); on platforms lacking `%-d` you would switch to `%d` or a
   manual format.
+- **Recurring tasks** (`daysheet_lib/recurring.py`): `build_recurring_sections(wd, d)`
+  reads `04-templates/recurring-tasks.crontab` (absent file → no sections),
+  ignores the minute/hour fields, and matches day-of-month/month/day-of-week
+  against `d` with standard cron semantics — including ranges, lists, `*/n`
+  steps, day-of-week `0`/`7` both meaning Sunday, and the DOM-or-DOW rule
+  (when both are restricted a date matches if *either* does). Each fired task
+  renders as `- [ ] <description>` under `## Recurring tasks`; the description
+  is kept verbatim (any trailing `#tag` stays in the text). A `#tag` also names
+  a checklist at `04-templates/checklists/<tag>.md`; fired tags with a matching
+  file are appended under `## Checklists mentioned` (first-seen order,
+  de-duplicated). A `#tag` with no file warns on stderr and is skipped.
 - **Output discipline**: the *content* of a daysheet goes to **stdout** (so it
   pipes into `glow` etc.); all status/diagnostic/"Created"/"Archived" messages
   go to **stderr**. Preserve this split — it is what makes piping clean.

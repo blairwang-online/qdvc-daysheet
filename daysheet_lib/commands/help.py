@@ -14,7 +14,9 @@ USAGE
 
 Daysheets are created from the components in
 04-templates/components/ (sorted by filename), with an auto-generated
-date heading and YAML frontmatter (ready_to_archive: False).
+date heading and YAML frontmatter (ready_to_archive: False). Recurring
+tasks due today (from 04-templates/recurring-tasks.crontab) and any
+checklists they reference are inserted automatically.
 
 Pipe to a renderer if you like:
   daysheet today | glow -
