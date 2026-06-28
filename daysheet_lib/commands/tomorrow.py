@@ -3,8 +3,8 @@
 import sys
 import datetime
 
-from python_modules.config import TOMORROW_DIR
-from python_modules.core import (
+from daysheet_lib.config import TOMORROW_DIR
+from daysheet_lib.core import (
     date_to_filename,
     list_dir_entries,
     parse_daysheet_filename,

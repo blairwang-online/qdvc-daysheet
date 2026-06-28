@@ -5,10 +5,10 @@ no working directory). `COMMANDS` maps the CLI verb to its handler, and
 `NEEDS_CONFIG` records which commands require a loaded working directory.
 """
 
-from python_modules.commands import help as help_cmd
-from python_modules.commands import status as status_cmd
-from python_modules.commands import today as today_cmd
-from python_modules.commands import tomorrow as tomorrow_cmd
+from daysheet_lib.commands import help as help_cmd
+from daysheet_lib.commands import status as status_cmd
+from daysheet_lib.commands import today as today_cmd
+from daysheet_lib.commands import tomorrow as tomorrow_cmd
 
 COMMANDS = {
     "today": today_cmd.run,

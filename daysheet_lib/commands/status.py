@@ -2,8 +2,8 @@
 
 import datetime
 
-from python_modules.config import ARCHIVE_DIR, TODAY_DIR, TOMORROW_DIR
-from python_modules.core import (
+from daysheet_lib.config import ARCHIVE_DIR, TODAY_DIR, TOMORROW_DIR
+from daysheet_lib.core import (
     classify_today_folder,
     date_to_filename,
     list_dir_entries,

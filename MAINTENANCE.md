@@ -5,7 +5,7 @@ Technical notes for anyone (human or AI) maintaining `daysheet.py`.
 ## Overview
 
 `daysheet.py` is a thin entry point; the implementation lives in the
-`python_modules` package, with no third-party dependency required. PyYAML is
+`daysheet_lib` package, with no third-party dependency required. PyYAML is
 used opportunistically for `config.yml`; if it is absent a minimal line parser
 reads the one key we need (`working_directory`).
 
@@ -13,7 +13,7 @@ reads the one key we need (`working_directory`).
 
 ```
 daysheet.py                     # thin CLI entry point (arg parse + dispatch)
-python_modules/
+daysheet_lib/
   config.py                     # folder-name constants, fail(), load_config()
   core.py                       # filename/frontmatter helpers + assembly
   commands/
@@ -25,7 +25,7 @@ python_modules/
 ```
 
 Each command module exposes `run(wd)` (help's `run()` takes no working
-directory). `python_modules/commands/__init__.py` maps the CLI verb to its
+directory). `daysheet_lib/commands/__init__.py` maps the CLI verb to its
 handler in `COMMANDS` and lists config-free commands in `NO_CONFIG`. To add a
 command: drop a `run(wd)` module under `commands/`, import and register it in
 that `__init__.py`, then document it in README.md, `daysheet help`, and the
@@ -42,7 +42,7 @@ Configured via `working_directory` in `config.yml` (sibling of `daysheet.py`):
 04-templates/components/  # *.md fragments, concatenated in filename order
 ```
 
-Constants for these names live in `python_modules/config.py`
+Constants for these names live in `daysheet_lib/config.py`
 (`TODAY_DIR`, `TOMORROW_DIR`, `ARCHIVE_DIR`, `TEMPLATE_DIR`,
 `COMPONENTS_SUBDIR`). Change them there if folder names ever change.
 

@@ -4,7 +4,7 @@ import os
 import datetime
 from pathlib import Path
 
-from python_modules.config import (
+from daysheet_lib.config import (
     ARCHIVE_DIR,
     COMPONENTS_SUBDIR,
     DAYSHEET_RE,

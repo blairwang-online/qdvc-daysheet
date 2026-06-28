@@ -3,8 +3,8 @@
 import sys
 import shutil
 
-from python_modules.config import TODAY_DIR
-from python_modules.core import (
+from daysheet_lib.config import TODAY_DIR
+from daysheet_lib.core import (
     archive_destination,
     classify_today_folder,
     date_to_filename,

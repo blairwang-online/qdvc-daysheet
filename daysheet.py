@@ -2,11 +2,11 @@
 """daysheet — manage markdown "daysheets" for daily planning.
 
 This is a thin entry point. The implementation lives in the
-`python_modules` package:
+`daysheet_lib` package:
 
-- python_modules/config.py        constants + config.yml loading
-- python_modules/core.py          filename/frontmatter helpers + assembly
-- python_modules/commands/*.py    one module per subcommand
+- daysheet_lib/config.py        constants + config.yml loading
+- daysheet_lib/core.py          filename/frontmatter helpers + assembly
+- daysheet_lib/commands/*.py    one module per subcommand
 
 See README.md for an overview and MAINTENANCE.md for internals.
 """
@@ -14,12 +14,12 @@ See README.md for an overview and MAINTENANCE.md for internals.
 import sys
 from pathlib import Path
 
-# Ensure the repo root is importable so `python_modules` resolves regardless
+# Ensure the repo root is importable so `daysheet_lib` resolves regardless
 # of where `daysheet` is invoked from.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from python_modules.commands import COMMANDS, NO_CONFIG
-from python_modules.config import fail, load_config
+from daysheet_lib.commands import COMMANDS, NO_CONFIG
+from daysheet_lib.config import fail, load_config
 
 
 def main(argv=None):
