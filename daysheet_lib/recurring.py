@@ -216,7 +216,7 @@ def build_recurring_sections(wd, d):
                 file=sys.stderr,
             )
             continue
-        checklist_blocks.append(f"### {tag}\n{body}")
+        checklist_blocks.append(f"### {tag}\n\n{body}")
 
     if checklist_blocks:
         header = ["## Checklists mentioned", "", AUTO_NOTE, "", ""]
