@@ -219,7 +219,7 @@ def build_recurring_sections(wd, d):
         checklist_blocks.append(f"### {tag}\n{body}")
 
     if checklist_blocks:
-        header = ["## Checklists mentioned", "", AUTO_NOTE, ""]
-        sections.append("\n".join(header) + "\n".join(checklist_blocks))
+        header = ["## Checklists mentioned", "", AUTO_NOTE, "", ""]
+        sections.append("\n".join(header) + "\n\n".join(checklist_blocks))
 
     return sections
